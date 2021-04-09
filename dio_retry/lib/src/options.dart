@@ -26,9 +26,7 @@ class RetryOptions {
       {this.retries = 3,
       RetryEvaluator? retryEvaluator,
       this.retryInterval = const Duration(seconds: 1)})
-      : assert(retries != null),
-        assert(retryInterval != null),
-        _retryEvaluator = retryEvaluator;
+      : _retryEvaluator = retryEvaluator;
 
   factory RetryOptions.noRetry() {
     return RetryOptions(
