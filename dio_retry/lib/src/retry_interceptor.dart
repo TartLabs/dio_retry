@@ -13,7 +13,7 @@ class RetryInterceptor extends Interceptor {
       : options = options ?? const RetryOptions();
 
   @override
-  Future<dynamic> onError(
+  Future<void> onError(
       DioError err, ErrorInterceptorHandler errorInterceptorHandler) async {
     var extra = RetryOptions.fromExtra(err.requestOptions) ?? options;
 
@@ -32,20 +32,21 @@ class RetryInterceptor extends Interceptor {
         logger?.warning(
             '[${err.requestOptions.uri}] An error occured during request, trying a again (remaining tries: ${extra.retries}, error: ${err.error})');
         // We retry with the updated options
-        return await dio.request(
+        await dio.request(
           err.requestOptions.path,
           cancelToken: err.requestOptions.cancelToken,
           data: err.requestOptions.data,
           onReceiveProgress: err.requestOptions.onReceiveProgress,
           onSendProgress: err.requestOptions.onSendProgress,
           queryParameters: err.requestOptions.queryParameters,
-          options: Options(extra: err.requestOptions.extra),
+          options: extra.toOptions(),
         );
-      } catch (e) {
-        return e;
+        return;
+      } catch (_) {
+        return super.onError(err, errorInterceptorHandler);
       }
     }
 
-    return super.onError(err, errorInterceptorHandler);
+    super.onError(err, errorInterceptorHandler);
   }
 }

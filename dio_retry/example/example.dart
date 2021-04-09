@@ -23,7 +23,7 @@ void main() async {
   /// Sending a failing request for 3 times with a 5s interval
   try {
     await dio.get('http://www.mqldkfjmdisljfmlksqdjfmlkj.dev');
-  } catch (e) {
-    print('End error : $e');
+  } on DioError catch (e) {
+    print('End error : ${e.message}');
   }
 }
