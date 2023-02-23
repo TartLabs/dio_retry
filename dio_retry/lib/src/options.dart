@@ -40,7 +40,7 @@ class RetryOptions {
   /// a bas status code.
   static FutureOr<bool> defaultRetryEvaluator(DioError error) {
     return error.type != DioErrorType.cancel &&
-        error.type != DioErrorType.response;
+        error.type != DioErrorType.badResponse;
   }
 
   static RetryOptions? fromExtra(RequestOptions request) {
